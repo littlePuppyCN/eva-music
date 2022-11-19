@@ -20,3 +20,12 @@ html,body,#app{
 .el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf{
   border-bottom: none!important;
 }
+
+.el-button+.el-button{
+  margin-left:  0px;
+}
+
+.el-button{
+  margin-bottom: 8px;
+  margin-right: 8px;
+}

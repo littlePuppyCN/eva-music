@@ -9,4 +9,4 @@ export const usePlayList = defineStore('playList', () => {
     }
   
     return { playing , changePlaying}
-  })
+})

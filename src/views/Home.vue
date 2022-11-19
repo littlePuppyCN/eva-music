@@ -1,9 +1,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
-
 import Header from './layouts/Header.vue'
 import Menu from './layouts/Menu.vue'
 import Footer from './layouts/Footer.vue'
+
+
+
 </script>
 
 <template>

@@ -2,13 +2,13 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/global'
-
+import DropBar from '../../components/DropBar/DropBar.vue';
 const router = useRouter()
 const store = useMenuStore()
 const { changeActive } = store
- 
 const keyword = ref('')
-
+const dropBarVisible = ref(false) 
+const history = ref(['我们都一样','old money','take me to the church','火车日记','你就不要想起我'])
 
 const onSearch = async () => {
     const curPath = '/search'
@@ -16,6 +16,22 @@ const onSearch = async () => {
         router.push({ path: curPath ,query:{keyword:keyword.value}})
         changeActive(999)
     }
+    dropBarVisible.value = false
+    if(history.value.includes(keyword.value)) return 
+    history.value.unshift(keyword.value)
+}
+
+const onFocus = () => {
+    dropBarVisible.value = true
+}
+
+const onBlur = () => {
+    dropBarVisible.value = false
+}
+
+const onHistoryClick = (key) => {
+    keyword.value = key
+    onSearch()
 }
 
 </script>
@@ -29,8 +45,9 @@ const onSearch = async () => {
                     <span class="go">&lt;</span>
                     <span class="back">&gt;</span>
                 </div>
-                <div>
-                    <input v-model="keyword" id="search" type="text" @keydown.enter="onSearch">
+                <div style="position:relative;">
+                    <DropBar @onHotClick="onHistoryClick" @onHistoryClick="onHistoryClick" :history="history" @onBlur="onBlur" :visible="dropBarVisible" />
+                    <input @click="onFocus"  v-model="keyword" id="search" type="text" @keydown.enter="onSearch">
                 </div>
             </div>
         </div>

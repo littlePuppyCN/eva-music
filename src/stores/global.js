@@ -20,3 +20,12 @@ export const useMenuStore = defineStore('global', () => {
   return { activeMenuIndex, changeActive }
 })
 
+export const globalClick = (fn) => {
+
+  const whitelist = ['search','drop']
+
+  document.getElementById('main').onclick = (evt) => {
+    if(whitelist.includes(evt.target.id)) return 
+    fn()
+  }
+}

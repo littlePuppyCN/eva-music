@@ -11,3 +11,9 @@ export const getMusicUrl = (id) => {
         return res
     })
 } 
+
+export const getHot = (id) => {
+    return fetch(`${baseUrl}/search/hot/detail`).then(res=>res.json()).then(res => {
+        return res
+    })
+} 
