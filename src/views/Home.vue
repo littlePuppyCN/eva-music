@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 import Header from './layouts/Header.vue'
 import Menu from './layouts/Menu.vue'
 import Footer from './layouts/Footer.vue'
-
+import PlayListVue from '../components/PlayList/PlayList.vue'
 
 
 </script>
@@ -16,6 +16,7 @@ import Footer from './layouts/Footer.vue'
         <main>
             <div class="menu"><Menu /></div>
             <div class="content"><RouterView /></div>
+            <PlayListVue />
         </main>
         <div class="footer">
             <Footer />
@@ -35,6 +36,7 @@ main{
     display: flex;
 }
 main .content{
+    position: relative;
     flex: 1;
 }
 

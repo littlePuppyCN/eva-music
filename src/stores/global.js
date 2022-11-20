@@ -12,7 +12,7 @@ export const useCounterStore = defineStore('counter', () => {
 })
 
 export const useMenuStore = defineStore('global', () => {
-  const activeMenuIndex = ref(0)
+  const activeMenuIndex = ref('/')
   function changeActive(newIndex) {
     activeMenuIndex.value = newIndex
   }

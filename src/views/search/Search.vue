@@ -4,11 +4,7 @@
             <div class="bar">
                 搜索 {{ keyword }}
             </div>
-            <div class="navWrapper">
-                <span :class="['nav',idx == currentTab ? 'navActive' : '']" v-for="(tab, idx) in tabs" :key="tab.type" @click="onBtn(tab, idx)">
-                    {{ tab.name }}
-                </span>
-            </div>
+            <TabsVue :currentTab="currentTab" :tabs="tabs" @onTabClick="onTabClick" />
         </div>
         <div>
             <Loading :loading="loading">
@@ -25,6 +21,7 @@ import { watch, ref } from 'vue'
 import Music from './music.vue'
 import Singer from './singer.vue'
 import Loading from '@/components/Loading/Loading.vue'
+import TabsVue from '../../components/Tabs/Tabs.vue'
 const router = useRouter()
 const loading = ref(true)
 const keyword = ref('')
@@ -55,7 +52,7 @@ const tabs = [
     { name: '用户', component: Singer, type: 1002 },
 ]
 
-const onBtn = async (tab, idx) => {
+const onTabClick = async (tab,idx) => {
     loading.value = true
     if (currentTab.value == idx) return
     currentTab.value = idx
@@ -100,7 +97,7 @@ button {
 }
 
 .navActive{
-    border-bottom: 2px solid #7c4f9c;
+    border-bottom: 2px solid #626aef;
     padding-bottom: 2px;
 }
 </style>

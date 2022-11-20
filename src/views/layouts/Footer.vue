@@ -5,7 +5,11 @@ import { storeToRefs } from 'pinia'
 
 const store = usePlayList()
 const { playing } = storeToRefs(store)
-const { changePlaying } = store
+const { changePlaying, changeVisible } = store
+
+const onPlayListVisible = () => {
+    changeVisible()
+}
 
 const onCollect = () => {
     const isCollected = playing.value.collect
@@ -32,7 +36,9 @@ const onCollect = () => {
             <Audio>
             </Audio>
         </div>
-        <div>3</div>
+        <div @click="onPlayListVisible">
+            <el-icon size="20"><Operation /></el-icon>
+        </div>
     </div>
 </template>
 

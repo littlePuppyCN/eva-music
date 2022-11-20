@@ -1,8 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router'
+import {  useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { useMenuStore } from '@/stores/global'
-import DropBar from '../../components/DropBar/DropBar.vue';
+import DropBar from '../../components/DropBar/DropBar.vue'
+import { watch } from 'vue'
+
 const router = useRouter()
 const store = useMenuStore()
 const { changeActive } = store
@@ -10,11 +12,19 @@ const keyword = ref('')
 const dropBarVisible = ref(false) 
 const history = ref(['我们都一样','old money','take me to the church','火车日记','你就不要想起我'])
 
+watch(
+    () => router.currentRoute.value.path,
+    (n,o) => {
+        if(n == o) return
+        changeActive(n)
+    }
+)
+
 const onSearch = async () => {
     const curPath = '/search'
     if(router.currentRoute.value.fullPath !== curPath){
         router.push({ path: curPath ,query:{keyword:keyword.value}})
-        changeActive(999)
+        changeActive(curPath)
     }
     dropBarVisible.value = false
     if(history.value.includes(keyword.value)) return 
@@ -34,6 +44,14 @@ const onHistoryClick = (key) => {
     onSearch()
 }
 
+const cleanHistory = () => {
+    history.value = []
+}
+
+const goBack = () => {
+    console.log(router)
+}
+
 </script>
 
 <template>
@@ -42,16 +60,16 @@ const onHistoryClick = (key) => {
             <div class="logo">追 忆 云 音 乐</div>
             <div class="searchBar">
                 <div>
-                    <span class="go">&lt;</span>
-                    <span class="back">&gt;</span>
+                    <span @click="router.go(-1)" class="go">&lt;</span>
+                    <span @click="router.go(1)" class="back">&gt;</span>
                 </div>
                 <div style="position:relative;">
-                    <DropBar @onHotClick="onHistoryClick" @onHistoryClick="onHistoryClick" :history="history" @onBlur="onBlur" :visible="dropBarVisible" />
-                    <input @click="onFocus"  v-model="keyword" id="search" type="text" @keydown.enter="onSearch">
+                    <DropBar @cleanHistory="cleanHistory" @onHotClick="onHistoryClick" @onHistoryClick="onHistoryClick" :history="history" @onBlur="onBlur" :visible="dropBarVisible" />
+                    <input autocomplete="off" @click="onFocus"  v-model="keyword" id="search" type="text" @keydown.enter="onSearch" placeholder="搜索">
                 </div>
             </div>
         </div>
-        <div id="user">123</div>
+        <div id="user">未登录</div>
     </header>
 </template>
 
@@ -61,7 +79,7 @@ header {
     height: 65px;
     display: flex;
     align-items: center;
-    background: #7c4f9c;
+    background: #626aef;
     color: white;
     padding: 0 18px;
     justify-content: space-between;
@@ -85,24 +103,25 @@ header {
 .back {
     width: 22px;
     height: 22px;
-    background: #7d5896;
+    background: rgba(255, 255, 255, .3);
     display: inline-block;
     border-radius: 50%;
     line-height: 19px;
     text-align: center;
+    margin-right: 10px;
 }
 
 .go:hover,
 .back:hover {
     cursor: pointer;
-    background-color: #84629a;
+    background-color: rgba(221, 217, 217, 0.3);
 }
 
 #search {
     height: 30px;
     width: 180px;
     border-radius: 20px;
-    background-color: #7d5896;
+    background-color: rgba(255, 255, 255, .3);
     border: none;
     margin-left: 30px;
     text-indent: 14px;

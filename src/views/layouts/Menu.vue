@@ -10,7 +10,7 @@ const { changeActive } = store
 const router = useRouter()
 
 const handleRoutesClick = (routeInfo, index) => {
-    changeActive(index)
+    changeActive(routeInfo.path)
     router.push(routeInfo.path)
 }
 
@@ -23,7 +23,7 @@ const getRealMenu = computed(() => {
 <template>
     <div class="menu_container">
         <div v-for="(route, idx) in getRealMenu" @click="handleRoutesClick(route, idx)" :key="idx"
-            :class="['static', idx == activeMenuIndex ? 'active' : '']">
+            :class="['static', route.path == activeMenuIndex ? 'active' : '']">
             {{ route.cname }}
         </div>
     </div>
