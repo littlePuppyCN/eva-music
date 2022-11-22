@@ -3,7 +3,9 @@
         <TabsVue :currentTab="currentTab" :tabs="findTabs" @onTabClick="onTabClick" />
         <div style="margin-top:30px;">
             <Loading :loading="loading">
-                <component :is="findTabs[currentTab].component" :data.sync="currentData"></component>
+                <KeepAlive>
+                    <component :is="findTabs[currentTab].component" :data.sync="currentData"></component>
+                </KeepAlive>
             </Loading>
         </div>
     </div>

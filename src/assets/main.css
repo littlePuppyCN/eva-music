@@ -52,6 +52,22 @@ body,
   -webkit-box-shadow: none;
 }
 
+.el-table__inner-wrapper::before{
+  background-color: transparent!important;
+}
+
 .el-icon:hover{
   cursor: pointer;
+}
+
+.pl8{
+  padding-left: 8px!important;
+}
+
+.table_row_active .row_active_show{
+  display: block;
+}
+
+.table_row_active .row_active_hide{
+  display: none;
 }

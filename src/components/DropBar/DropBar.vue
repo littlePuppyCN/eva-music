@@ -45,7 +45,7 @@
 import { onMounted, ref } from 'vue';
 import { globalClick } from '@/stores/global.js'
 import { getHot } from '@/request/request.js'
-import DialogVue from '../Dialog/Dialog.vue';
+import DialogVue from '../Dialog/Dialog.vue'
 
 const props = defineProps(['visible', 'history'])
 const emit = defineEmits(['onBlur', 'onHistoryClick', 'onHotClick', 'cleanHistory'])

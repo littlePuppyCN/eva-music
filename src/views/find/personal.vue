@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <el-carousel :interval="4000" type="card" height="198px" indicator-position="none">
-            <el-carousel-item v-for="(item,idx) in bannerList" :key="idx">
+            <el-carousel-item v-for="(item, idx) in bannerList" :key="idx">
                 <img class="img" :src="item.imageUrl" alt="">
             </el-carousel-item>
         </el-carousel>
@@ -22,12 +22,13 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.wrapper{
+.wrapper {
     text-align: center;
     width: 1100px;
     margin: 0 auto;
 }
-.img{
+
+.img {
     width: 540px;
     height: 198px;
     border-radius: 4px;

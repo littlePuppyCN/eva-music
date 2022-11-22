@@ -17,7 +17,13 @@ export const useMenuStore = defineStore('global', () => {
     activeMenuIndex.value = newIndex
   }
 
-  return { activeMenuIndex, changeActive }
+  const songPageVisible = ref(false)
+
+  function changeSongVisible () {
+    songPageVisible.value = !songPageVisible.value
+  }
+
+  return { activeMenuIndex, changeActive , songPageVisible , changeSongVisible}
 })
 
 export const globalClick = (fn) => {

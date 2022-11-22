@@ -1,11 +1,16 @@
 <template>
     <div>
-        <el-table @row-dblclick="onPlay" stripe :data="tableData" style="width: 100%">
+        <TableVue :data-source="tableData">
             <el-table-column width="80">
                 <template #default="scope">
                     <div style="display:flex;align-items:center;">
                         <span style="margin-right:12px;">
-                            {{ tdIndex(scope.row.key) }}
+                            <span v-if="scope.row.id == playing.id">
+                                <el-icon color="#626aef"><Headset /></el-icon>
+                            </span>
+                            <span v-else>
+                                {{ tdIndex(scope.row.key) }}
+                            </span>
                         </span>
                         <el-icon size="16" class="collect" @click="onCollect(scope.row)">
                             <Star color="red" v-if="scope.row.collect" />
@@ -17,7 +22,7 @@
             <el-table-column label="音乐标题">
                 <template #default="scope">
                     <div style="display:flex;align-items:center;">
-                        <span style="color:#507daf;">{{ scope.row.name }}</span>
+                        <span class="song_name" style="color:#507daf;">{{ scope.row.name }}</span>
                         <span class="scale" v-if="scope.row.sq != null">SQ</span>
                         <span class="scale" v-if="scope.row.fee == 1">VIP</span>
                         <span class="scale" v-if="scope.row.originCoverType == 1">原唱</span>
@@ -34,29 +39,31 @@
                     </div>
                 </template>
             </el-table-column>
-        </el-table>
+        </TableVue>
     </div>
 </template>
 
 <script setup>
 import { computed } from '@vue/reactivity'
 import { ref, watch } from 'vue'
-import { getMusicUrl } from '@/request/request.js'
 import { usePlayList } from '@/stores/playList'
 import { storeToRefs } from 'pinia'
+import TableVue from '../../components/Table/Table.vue'
 const store = usePlayList()
 const { playing } = storeToRefs(store)
 const { changePlaying } = store
 const props = defineProps(['data'])
 const priviteData = ref(props.data)
 
+// 待修改 提到table内 props控制隐藏显示
 watch(
-    () => playing,
-    async (n,o) => {
-        if(n.value.id != o.value.id) return 
+    () => playing.value.id,
+    async (n, o) => {
+        if (n != o) return
+        console.log(n)
         priviteData.value.songs.forEach((d, idx) => {
-            if (n.value.id == d.id) {
-                d.collect = n.value.collect
+            if (n == d.id) {
+                d.collect = playing.value.collect
             }
         })
     },
@@ -104,12 +111,6 @@ const onCollect = (row) => {
             d.collect = !d.collect
         }
     })
-}
-
-const onPlay = async (row, col) => {
-    const res = await getMusicUrl(row.id)
-    const data = res.data[0]
-    changePlaying({ ...data, name: row.name, arname: row.arname, collect: row.collect })
 }
 
 </script>

@@ -25,3 +25,9 @@ export const getBanner = (id) => {
         return res
     })
 } 
+
+export const getSongLyric = (id) => {
+    return fetch(`${baseUrl}/lyric?id=${id}`).then(res=>res.json()).then(res => {
+        return res
+    })
+} 
