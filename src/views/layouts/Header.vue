@@ -2,14 +2,18 @@
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { useMenuStore } from '@/stores/global'
+import { useLogin } from '@/stores/login.js'
 import DropBar from '../../components/DropBar/DropBar.vue'
 import { watch } from 'vue'
-import { getLocalData , setLocalData} from '@/utils/utils.js'
+import { getLocalData, setLocalData } from '@/utils/utils.js'
 import { storeToRefs } from 'pinia'
 
+const loginStore = useLogin()
 const router = useRouter()
 const store = useMenuStore()
-const { changeActive , changeSongVisible} = store
+const { cookie, userInfo } = storeToRefs(loginStore)
+const { changeVisible , handleLogout } = loginStore
+const { changeActive, changeSongVisible } = store
 const keyword = ref('')
 const dropBarVisible = ref(false)
 const history = ref([])
@@ -23,9 +27,17 @@ watch(
     }
 )
 
+const logout = () => {
+    handleLogout()
+}
+
+const onLogin = () => {
+    changeVisible(true)
+}
+
 const onSearch = async () => {
     // 在歌曲详情页搜索 隐藏详情页
-    if(songPageVisible.value){
+    if (songPageVisible.value) {
         changeSongVisible()
     }
     const curPath = '/search'
@@ -36,7 +48,7 @@ const onSearch = async () => {
     dropBarVisible.value = false
     if (history.value.includes(keyword.value)) return
     history.value.unshift(keyword.value)
-    setLocalData('HISTORY',history.value)
+    setLocalData('HISTORY', history.value)
 }
 
 const onFocus = () => {
@@ -54,7 +66,7 @@ const onHistoryClick = (key) => {
 
 const cleanHistory = () => {
     history.value = []
-    setLocalData('HISTORY',[])
+    setLocalData('HISTORY', [])
 }
 
 onMounted(() => {
@@ -64,9 +76,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <header :class="{hide:songPageVisible}">
+    <header :class="{ hide: songPageVisible }">
         <div id="leftBar">
-            <div  class="logo"> <div :class="{hide_logo:songPageVisible}">追 忆 云 音 乐</div> </div>
+            <div class="logo">
+                <div :class="{ hide_logo: songPageVisible }">追 忆 云 音 乐</div>
+            </div>
             <div class="searchBar">
                 <div>
                     <span @click="router.go(-1)" class="go">&lt;</span>
@@ -76,21 +90,61 @@ onMounted(() => {
                     <DropBar @cleanHistory="cleanHistory" @onHotClick="onHistoryClick" @onHistoryClick="onHistoryClick"
                         :history="history" @onBlur="onBlur" :visible="dropBarVisible" />
                     <input autocomplete="off" @click="onFocus" v-model="keyword" id="search" type="text"
-                        @keydown.enter="onSearch" placeholder="搜索">
+                        @keydown.enter="onSearch" placeholder="搜索喜欢的音乐">
                 </div>
             </div>
         </div>
-        <div id="user">未登录</div>
+        <div v-if="!cookie.length" id="user" @click="onLogin">未登录</div>
+        <div v-else style="display:flex;align-items: center;">
+            <div class="userPic" :style="{ 'background-image': 'url(' + userInfo.profile?.avatarUrl + ')' }">
+            </div>
+            <el-dropdown>
+                <span style="color:white;font-size:12px;margin-left:6px;cursor: pointer;">
+                    {{ userInfo.profile?.nickname }}
+                    <el-icon class="el-icon--right">
+                        <arrow-down />
+                    </el-icon>
+                </span>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
+        </div>
+
     </header>
 </template>
 
 <style scoped>
-.hide_logo{
+::-webkit-input-placeholder{
+    color: rgba(255,255,225,.6);
+}
+.userPic {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+#user {
+    color: #e0e0e0;
+}
+
+#user:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.hide_logo {
     visibility: hidden;
 }
-.hide{
-    background: transparent!important;
+
+.hide {
+    background: transparent !important;
 }
+
 header {
     width: 100%;
     height: 65px;

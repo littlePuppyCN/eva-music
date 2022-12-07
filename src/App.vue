@@ -1,14 +1,23 @@
 <script setup>
 import Home from './views/Home.vue'
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import { useLogin } from '@/stores/login'
+import { onMounted } from 'vue'
+import { getLocalData } from '@/utils/utils.js'
 
-// window.onload = () => {
-//   const currentPath = router.currentRoute.value.path
-//   if(currentPath !== '/') {
-//     router.push('/')
-//   }
-// }
+const store = useLogin()
+const { changeCookie , changeUserInfo} = store
+
+
+onMounted(() => {
+  const cok = getLocalData('COOKIE')
+  const uInfo = getLocalData('USER')
+  if(cok?.length){
+    changeCookie(cok)
+  }
+  if(Object.keys(uInfo || {}).length > 0){
+    changeUserInfo(uInfo)
+  }
+})
 
 </script>
 

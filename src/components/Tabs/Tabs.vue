@@ -10,6 +10,8 @@
 </template>
 
 <script setup>
+import { ref, toRef } from 'vue';
+
 const props = defineProps(['fontSize','currentTab','tabs'])
 const emit = defineEmits(['onTabClick'])
 const onClick = (tab,idx) => {

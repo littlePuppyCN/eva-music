@@ -27,7 +27,7 @@ import { usePlayList } from '@/stores/playList'
 const props = defineProps(['visible'])
 const store = usePlayList()
 const { lyric, playing } = storeToRefs(store)
-
+console.log(lyric)
 </script>
 
 <style scoped>

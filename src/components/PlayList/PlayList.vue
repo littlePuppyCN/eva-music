@@ -4,7 +4,7 @@
             <h3>当前播放</h3>
             <div class="bottom">
                 <div class="all">
-                    总282首
+                    总{{playList.length}}首
                 </div>
                 <div class="options">
                     <span>收藏全部</span>
@@ -13,20 +13,8 @@
             </div>
         </header>
         <div class="content">
-            <TableVue :data-source="playList">
-                <el-table-column show-overflow-tooltip class-name="pl8" width="220" label="音乐标题">
-                    <template #default="scope">
-                        <div style="display:flex;align-items:center;">
-                            <span class="song_name" style="color:#507daf;">{{ scope.row.name }}</span>
-                            <span class="scale" v-if="scope.row.sq != null">SQ</span>
-                            <span class="scale" v-if="scope.row.fee == 1">VIP</span>
-                            <span class="scale" v-if="scope.row.originCoverType == 1">原唱</span>
-                        </div>
-                    </template>
-                </el-table-column>
-                <el-table-column show-overflow-tooltip prop="arname" label="歌手" />
-                <el-table-column show-overflow-tooltip prop="dt" label="时长" width="100" />
-            </TableVue>
+            <MusicVue :closeLoading="true" :data="{songs:playList}" :visible="['firts','al','热度']">
+            </MusicVue>
         </div>
     </div>
 </template>
@@ -35,6 +23,7 @@
 import { storeToRefs } from 'pinia'
 import { usePlayList } from '@/stores/playList'
 import TableVue from '../Table/Table.vue'
+import MusicVue from '../../views/search/music.vue'
 import { getLocalData } from '@/utils/utils.js'
 import { onMounted } from 'vue'
 

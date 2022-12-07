@@ -2,6 +2,10 @@ import Find from '../views/find/FindMusic.vue'
 import Radio from '../views/radio/Radio.vue'
 import Search from '../views/search/Search.vue'
 import Video from '../views/video/Video.vue'
+import Recommend from '../views/recommend/index.vue'
+import SongSheet from '../views/songSheet/sheet.vue'
+import iLike from '@/views/iLike/index.vue'
+import Login from '@/views/login/index.vue'
 const routes = [
     {
         path: '/',
@@ -43,6 +47,42 @@ const routes = [
         path:'/search',
         name:'search',
         component:Search
+    },
+    {
+        path:'/recommend',
+        name:'recommend',
+        component:Recommend
+    },
+    {
+        path:'/songsheet/:id',
+        name:'songsheet',
+        component:SongSheet
+    },
+    {
+        path:'/iLike',
+        name:'iLike',
+        cname:'我喜欢的音乐',
+        personal:true,
+        component:iLike,
+        meta:{
+            auth:true
+        }
+    },
+    {
+        path:'/download',
+        name:'download',
+        cname:'本地与下载',
+        personal:true,
+    },
+    {
+        path:'/recent',
+        name:'recent',
+        cname:'最近播放',
+        personal:true,
+    },
+    {
+        path:'/login',
+        component:Login
     }
 ]
 

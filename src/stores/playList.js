@@ -7,6 +7,11 @@ export const usePlayList = defineStore('playList', () => {
   const playList = ref([])
   const playListVisible = ref(false)
   const lyric = ref('')
+  const urlLoading = ref(false)
+
+  function changeUrlLoading(bol) {
+    urlLoading.value = bol
+  }
 
   function changePlaying(url) {
     playing.value = url
@@ -47,6 +52,8 @@ export const usePlayList = defineStore('playList', () => {
     replacePlayList,
     cleanPlayList,
     lyric,
-    changeLyric
+    changeLyric,
+    urlLoading,
+    changeUrlLoading
   }
 })

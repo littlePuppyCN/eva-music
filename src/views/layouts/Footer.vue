@@ -4,6 +4,7 @@ import SongVue from '../../views/song/Song.vue';
 import { useMenuStore } from '@/stores/global'
 import { usePlayList } from '@/stores/playList'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 const store = usePlayList()
 const storeGlobal = useMenuStore()
@@ -11,6 +12,15 @@ const { playing } = storeToRefs(store)
 const { songPageVisible } = storeToRefs(storeGlobal)
 const { changePlaying, changeVisible } = store
 const { changeSongVisible } = storeGlobal
+const audioIsPlaying = ref(false)
+
+const onplay = () => {
+    audioIsPlaying.value = true
+}
+
+const onpause = () => {
+    audioIsPlaying.value = false
+}
 
 const onPlayListVisible = () => {
     changeVisible()
@@ -32,7 +42,10 @@ const onSongVisible = async () => {
         <SongVue :visible="songPageVisible" />
         <div class="footer" style="z-index: 98;background: white;">
             <div style="display:flex;align-items:center;margin-left:20px;">
-                <div style="margin-right:20px;">
+                <div :style="{'animation':audioIsPlaying? '3s linear rotate infinite':'','opacity':Object.keys(playing).length > 0?1:0}" class="cloud">
+                    
+                </div>
+                <div style="margin-right:20px;" v-if="Object.keys(playing).length > 0">
                     <span @click="onSongVisible">
                         <el-icon size="18">
                             <ArrowUpBold />
@@ -53,7 +66,7 @@ const onSongVisible = async () => {
                 </div>
             </div>
             <div>
-                <Audio>
+                <Audio @onplay="onplay" @onpause="onpause" :status="audioIsPlaying">
                 </Audio>
             </div>
             <div @click="onPlayListVisible" style="margin-right:30px;">
@@ -68,6 +81,17 @@ const onSongVisible = async () => {
 
 
 <style scoped>
+.cloud{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url('@/assets/heijiao.png');
+    margin-right: 20px;
+    /* animation: 3s linear rotate infinite; */
+    
+}
 .footer {
     border-top: 1px solid #e0e0e0;
     display: flex;
@@ -75,5 +99,14 @@ const onSongVisible = async () => {
     justify-content: space-between;
     align-items: center;
     /* padding: 0 20px 0 30px; */
+}
+
+@keyframes rotate {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
 </style>

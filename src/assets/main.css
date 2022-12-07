@@ -56,6 +56,10 @@ body,
   background-color: transparent!important;
 }
 
+.el-icon{
+  vertical-align: -9%;
+}
+
 .el-icon:hover{
   cursor: pointer;
 }
@@ -70,4 +74,22 @@ body,
 
 .table_row_active .row_active_hide{
   display: none;
+}
+
+section{
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scale {
+  font-size: 14px;
+  color: red;
+  border: 1.5px solid red;
+  padding: 0 2px;
+  transform: scaleY(0.6) translateY(3px);
+  margin-left: 6px;
+  border-radius: 4px;
 }

@@ -1,6 +1,7 @@
 <template>
     <div class="loading" v-if="loading">
-         载入中...
+        <img src="@/assets/b.gif" alt="">
+        <div> 载入中...</div>
     </div>
     <slot v-else />
 </template>

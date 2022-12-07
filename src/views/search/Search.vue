@@ -8,7 +8,7 @@
         </div>
         <div>
             <Loading :loading="loading">
-                <component :is="tabs[currentTab].component" :data.sync="currentData"></component>
+                <component :is="tabs[currentTab].component" :data="currentData" :visible="[]"></component>
             </Loading>
         </div>
     </div>

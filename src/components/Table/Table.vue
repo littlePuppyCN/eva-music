@@ -10,15 +10,20 @@ import { usePlayList } from '@/stores/playList'
 import { storeToRefs } from 'pinia'
 const store = usePlayList()
 const { playing } = storeToRefs(store)
-const { changePlaying, addToList ,changeLyric} = store
+const { changePlaying, addToList ,changeLyric } = store
 const props = defineProps(['dataSource'])
 
 
 const onPlay = async (row) => {
+    
     const res = await getMusicUrl(row.id)
     const lyric = await getSongLyric(row.id)
     const data = res.data[0]
     const setSongInfo = { ...data, ...row }
+    // 如果是从歌单播放 则替换当前播放列表为歌单
+    if(row.replace){
+        
+    }
     changeLyric(lyric.lrc.lyric)
     changePlaying(setSongInfo)
     addToList(setSongInfo)
