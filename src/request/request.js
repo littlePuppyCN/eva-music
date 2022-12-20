@@ -99,7 +99,7 @@ export const getPhoneCode = (phone) => {
 }
 
 export const login = (phone,captcha) => {
-    return c_fetch(`${verUrl}/login/cellphone?phone=${phone}&captcha=${captcha}`, { credentials: 'include' }).then(res=>res.json()).then(res => {
+    return c_fetch(`${verUrl}/login/cellphone?phone=${phone}&captcha=${captcha}`, { credentials: 'include'}).then(res=>res.json()).then(res => {
         return res
     })
 }
@@ -107,6 +107,13 @@ export const login = (phone,captcha) => {
 // 歌曲详情
 export const getSong = (ids) => {
     return c_fetch(`${verUrl}/song/detail?ids=${ids}&timestamp=${Date.now()}`, { credentials: 'include' }).then(res=>res.json()).then(res => {
+        return res
+    })
+}
+
+// 喜欢歌曲
+export const likeSong = (id,like) => {
+    return c_fetch(`${verUrl}/like?id=${id}&like=${like}&timestamp=${Date.now()}`, { credentials: 'include' }).then(res=>res.json()).then(res => {
         return res
     })
 }

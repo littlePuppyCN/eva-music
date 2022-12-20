@@ -9,10 +9,10 @@
   let interceptors_req = [], interceptors_res = [] 
 
   function c_fetch (input, init = {}) {
+   
     //fetch默认请求方式设为GET
     if(!init.method){
       init.method = 'GET'
-      // init.headers = {}
     }
     
     //interceptors_req是拦截请求的拦截处理函数集合

@@ -25,6 +25,7 @@ import Personal from './personal.vue'
 import Custome from './custome.vue'
 import TabsVue from '../../components/Tabs/Tabs.vue'
 import Sheet from './sheet.vue'
+import Rank from './rank.vue'
 
 const loading = ref(false)
 const currentTab = ref(0)
@@ -34,7 +35,7 @@ const findTabs = [
     { name: '个性推荐', component: Personal },
     { name: '专属定制', component: Custome },
     { name: '歌单', component: Sheet },
-    { name: '排行榜', component: Personal },
+    { name: '排行榜', component: Rank },
     { name: '歌手', component: Personal },
     { name: '最新音乐', component: Personal },
 ]

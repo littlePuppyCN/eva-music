@@ -35,7 +35,7 @@ import { setLocalData } from '@/utils/utils.js'
 import { ElMessage } from 'element-plus'
 const store = useLogin()
 const { loginVisible, } = storeToRefs(store)
-const { changeVisible, changeUserInfo, changeCookie ,handleLogin } = store
+const { changeVisible, changeUserInfo, changeCookie, handleLogin } = store
 
 const phone = ref('')
 const code = ref('')
@@ -101,13 +101,21 @@ const getCode = async () => {
 const onLogin = async () => {
     if (isPhoneNum(phone.value)) {
         const res = await login(phone.value, code.value)
-        const userInfo = { account: res.account, profile: res.profile }
-        handleLogin(userInfo,res.cookie)
- 
-        ElMessage({
-            message: '登录成功！',
-            type: 'success',
-        })
+        if (res.code === 200) {
+            const userInfo = { account: res.account, profile: res.profile }
+            handleLogin(userInfo, res.cookie)
+
+            ElMessage({
+                message: '登录成功！',
+                type: 'success',
+            })
+        }else{
+            ElMessage({
+                message: res.message,
+                type: 'error',
+            })
+        }
+
     } else {
         showRule.value = true
     }

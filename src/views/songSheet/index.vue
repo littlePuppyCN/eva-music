@@ -1,40 +1,40 @@
 <template>
     <section>
         <header>
-            <el-skeleton style="width:440px;" :loading="!Object.keys(props.sheetInfo).length > 0" animated>
+            <el-skeleton style="width:440px;" :loading="info.songs && !Object.keys(info.songs).length > 0" animated>
                 <template #default>
                     <div class="left">
-                        <img v-if="isEmpty" :src="props.sheetInfo.coverImgUrl" alt="">
+                        <img v-if="isEmpty" :src="info.coverImgUrl" alt="">
 
                     </div>
                     <div class="info">
                         <h1><span class="scale" style="margin-right:8px;margin-left: 0px;">歌单</span>{{
-                                props.sheetInfo.name
+                                info.name
                         }}
                         </h1>
                         <div class="actor">
-                            <img v-if="isEmpty" :src="props.sheetInfo.creator?.avatarUrl" alt="">
-                            <span>{{ props.sheetInfo.creator?.nickname }}</span>
-                            <p>{{ timestampToTime(props.sheetInfo.createTime) }}创建</p>
+                            <img v-if="isEmpty" :src="info.creator?.avatarUrl" alt="">
+                            <span>{{ info.creator?.nickname }}</span>
+                            <p>{{ timestampToTime(info.createTime) }}创建</p>
                         </div>
                         <div>
                             <el-button @click="onAllPlay" color="#626aef" type="primary" round :icon="Plus">播放全部
                             </el-button>
-                            <el-button round :icon="Collection">收藏({{ getChineseNumber(props.sheetInfo.subscribedCount
+                            <el-button round :icon="Collection">收藏({{ getChineseNumber(info.subscribedCount
                                     || 0)
                             }})
                             </el-button>
-                            <el-button round :icon="Share">分享{{ getChineseNumber(props.sheetInfo.shareCount || 0) }}
+                            <el-button round :icon="Share">分享{{ getChineseNumber(info.shareCount || 0) }}
                             </el-button>
                         </div>
                         <div>
                             标签:
                             <span style="color:#537eaf;">
-                                {{ props.sheetInfo.algTags?.join('/') }}
+                                {{ info.algTags?.join('/') }}
                             </span>
                         </div>
                         <div>
-                            简介:{{ props.sheetInfo.description }}
+                            简介:{{ info.description }}
                         </div>
                     </div>
                 </template>
@@ -44,8 +44,7 @@
             <div class="tab">
                 <TabsVue :currentTab="currentTab" :tabs="getTabs" @onTabClick="onTabClick" />
             </div>
-            <MusicVue @allPlayed="allPlayed" :all-play="allPlay" v-if="currentTab == 0" :visible="[]"
-                :data="{ songs: props.sheetInfo.tracks?.map((s) => ({ ...s, isList: true })) || [] }" />
+            <MusicVue @allPlayed="allPlayed" :all-play="allPlay" v-if="currentTab == 0" :visible="[]" :data="newInfo" />
             <Comment @onComment="onComment" :data="props.comment" v-else />
         </div>
     </section>
@@ -58,20 +57,35 @@ import {
     Share
 } from '@element-plus/icons-vue'
 import { sendComment } from '@/request/request.js'
-import { ref , toRef} from 'vue'
+import { ref, toRef , watch } from 'vue'
 import { timestampToTime, getChineseNumber } from '@/utils/utils.js'
 import MusicVue from '../search/music.vue'
 import TabsVue from '../../components/Tabs/Tabs.vue'
 import Comment from './comment.vue'
 import { computed } from '@vue/reactivity'
 
-const props = defineProps(['id', 'sheetInfo', 'comment'])
+const props = defineProps(['id', 'comment', 'sheetInfo'])
 const emit = defineEmits(['getComment'])
 const currentTab = ref(0)
+const info = toRef(props, 'sheetInfo')
+
+watch(
+    () => info.value,
+    (n) => {
+      console.log(n)
+    },
+    { deep: true }
+)
+
+const newInfo = computed(() => {
+    const obj = info.value
+    obj.songs = info.value.tracks?.map((s) => ({ ...s, isList: true }))
+    return obj
+})
 
 const tabs = ref([
     { name: '歌曲列表', value: 'songs' },
-    {name: `评论(0)`, value: 'comment' }
+    { name: `评论(0)`, value: 'comment' }
 ])
 
 const getTabs = computed(() => {
@@ -83,7 +97,7 @@ const getTabs = computed(() => {
 const allPlay = ref(false)
 
 const isEmpty = computed(() => {
-    return Object.keys(props.sheetInfo).length > 0
+    return Object.keys(info.value).length > 0
 })
 
 const allPlayed = () => {
@@ -109,7 +123,7 @@ const onComment = async (textarea) => {
     const res = await sendComment(param)
     setTimeout(() => {
         emit('getComment')
-    },2000)
+    }, 2000)
 }
 
 </script>
@@ -123,6 +137,7 @@ const onComment = async (textarea) => {
 .left {
     min-width: 200px;
     max-height: 200px;
+    max-width: 200px;
 }
 
 .actor p {

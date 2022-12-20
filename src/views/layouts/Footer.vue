@@ -1,6 +1,7 @@
 <script setup>
 import Audio from '@/components/Audio/Audio.vue'
-import SongVue from '../../views/song/Song.vue';
+import SongVue from '../../views/song/Song.vue'
+import CollectVue from '../../components/Collect/Collect.vue'
 import { useMenuStore } from '@/stores/global'
 import { usePlayList } from '@/stores/playList'
 import { storeToRefs } from 'pinia'
@@ -53,14 +54,11 @@ const onSongVisible = async () => {
                     </span>
                 </div>
                 <div>
-                    <div style="display:flex;align-items:center;">
-                        <span style="font-size:18px;margin-right: 4px;">
+                    <div style="display:flex;align-items:center;width: 200px;">
+                        <span style="font-size:18px;margin-right: 4px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">
                             {{ playing.name }}
                         </span>
-                        <el-icon v-if="playing.collect != undefined" @click="onCollect" size="18">
-                            <Star color="red" v-if="playing.collect" />
-                            <Star v-else />
-                        </el-icon>
+                        <CollectVue @onCollect="onCollect" v-if="Object.keys(playing).length > 0" :collected="playing.collect" :songID="playing.id" />
                     </div>
                     <span>{{ playing.arname }}</span>
                 </div>

@@ -27,7 +27,7 @@ export const useLogin = defineStore('login', () => {
 
     function handleLogout() {
         changeUserInfo({})
-        changeCookie('')
+        changeCookie("")
         removeLocalData('COOKIE')
         removeLocalData('USER')
     }

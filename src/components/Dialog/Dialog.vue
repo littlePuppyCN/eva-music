@@ -24,6 +24,6 @@ const onDialogConfirm = () => {
 
 </script>
 
-<style lang="scss" scoped>
+<style >
 
 </style>

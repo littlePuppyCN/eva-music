@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-skeleton style="width:80%;" :loading="!closeLoading && !tableData.length > 0" animated>
+        <el-skeleton style="width:80%;" :loading="!closeLoading && !tableData?.length > 0" animated>
             <template #default>
                 <el-table :row-class-name="highLight" @row-dblclick="onPlay" stripe :data="tableData"
                     style="width: 100%">
@@ -18,10 +18,11 @@
                                         {{ tdIndex(scope.row.key) }}
                                     </span>
                                 </span>
-                                <el-icon size="16" class="collect" @click="onCollect(scope.row)">
+                                <CollectVue @onCollect="onCollect(scope.row)"  :collected="scope.row.collect" :songID="scope.row.id" />
+                                <!-- <el-icon size="16" class="collect" @click="onCollect(scope.row)">
                                     <Star color="red" v-if="scope.row.collect" />
                                     <Star v-else />
-                                </el-icon>
+                                </el-icon> -->
                             </div>
                         </template>
                     </el-table-column>
@@ -53,10 +54,11 @@
 
 <script setup>
 import { computed } from '@vue/reactivity'
-import { watch, toRef } from 'vue'
+import { watch, toRef ,ref } from 'vue'
 import { usePlayList } from '@/stores/playList'
 import { storeToRefs } from 'pinia'
 import { getMusicUrl, getSongLyric } from '@/request/request.js'
+import CollectVue from '../../components/Collect/Collect.vue'
 const store = usePlayList()
 const { playing } = storeToRefs(store)
 const { changePlaying, addToList, changeLyric, replacePlayList, changeUrlLoading } = store
@@ -64,12 +66,13 @@ const props = defineProps(['data', 'visible', 'allPlay','closeLoading'])
 const emit = defineEmits(['allPlayed'])
 // ref是拷贝 toRef是引用
 const priviteData = toRef(props, 'data')
+
 // 待修改 提到table内 props控制隐藏显示
 watch(
     () => playing.value.id,
     (n, o) => {
         if (n != o) return
-        priviteData.value.songs.forEach((d, idx) => {
+        priviteData.value.songs?.forEach((d, idx) => {
             if (n == d.id) {
                 d.collect = playing.value.collect
             }
@@ -89,7 +92,7 @@ watch(
 )
 
 const tableData = computed(() => {
-    return priviteData.value.songs.map((song, idx) => {
+    return priviteData.value.songs?.map((song, idx) => {
         return {
             key: idx + 1,
             name: song.name,
@@ -122,7 +125,7 @@ const onAllPlay = async () => {
     emit('allPlayed')
 }
 
-// 播放音乐只需要音乐id 估做了修改
+// 播放音乐只需要音乐id 所以做了修改
 const onPlay = async (row) => {
     changeUrlLoading(true)
     // const res = await getMusicUrl(row.id)
@@ -139,24 +142,6 @@ const onPlay = async (row) => {
         addToList(setSongInfo)
     }
 }
-
-//原始逻辑
-// const onPlay = async (row) => {
-//     changeUrlLoading(true)
-//     const res = await getMusicUrl(row.id)
-//     changeUrlLoading(false)
-//     const lyric = await getSongLyric(row.id)
-//     const data = res.data[0]
-//     const setSongInfo = { ...data, ...row, ar: [{ name: row.arname }] }
-//     changeLyric(lyric.lrc.lyric)
-//     changePlaying(setSongInfo)
-//     // 如果是从歌单播放 则替换当前播放列表为歌单 否则添加单曲到播放列表
-//     if (row.replace) {
-//         replacePlayList(priviteData.value.songs)
-//     } else {
-//         addToList(setSongInfo)
-//     }
-// }
 
 const highLight = ({ row }) => {
     if (row.id == playing.value.id) {
@@ -179,13 +164,13 @@ function durationTrans(mss) {
 }
 
 const onCollect = (row) => {
-    const isCollected = playing.value.collect
+    const isCollected = row.collect
     if (isCollected != undefined && row.id == playing.value.id) {
         changePlaying({ ...playing.value, collect: !isCollected })
     }
     priviteData.value.songs.forEach((d, idx) => {
         if (row.key == (idx + 1)) {
-            d.collect = !d.collect
+            d.collect = !isCollected
         }
     })
 }
