@@ -1,5 +1,5 @@
 import c_fetch from "./fetch"
-const curUrl = false
+const curUrl = true
 const verUrl = curUrl ? 'http://localhost:3000': 'https://node.lazylan.top'
 const realIP = '192.168.2.104'
 
@@ -99,7 +99,7 @@ export const getPhoneCode = (phone) => {
 }
 
 export const login = (phone,captcha) => {
-    return c_fetch(`${verUrl}/login/cellphone?phone=${phone}&captcha=${captcha}`, { credentials: 'include'}).then(res=>res.json()).then(res => {
+    return c_fetch(`${verUrl}/login/cellphone?phone=${phone}&captcha=${captcha}&timestamp=${Date.now()}`, { credentials: 'include'}).then(res=>res.json()).then(res => {
         return res
     })
 }

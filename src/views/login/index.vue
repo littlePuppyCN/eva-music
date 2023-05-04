@@ -100,7 +100,8 @@ const getCode = async () => {
 
 const onLogin = async () => {
     if (isPhoneNum(phone.value)) {
-        const res = await login(phone.value, code.value)
+        const res = await login(phone.value, code.value).catch((err) => console.log(err))
+        console.log(res)
         if (res.code === 200) {
             const userInfo = { account: res.account, profile: res.profile }
             handleLogin(userInfo, res.cookie)

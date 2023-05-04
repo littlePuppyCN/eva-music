@@ -94,7 +94,8 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <div v-if="!cookie.length" id="user" @click="onLogin">未登录</div>
+        <div><a style="{color:white;}" href="https://cloud.lazylan.top/" target="_blank">我的博客</a></div>
+        <!-- <div v-if="!cookie.length" id="user" @click="onLogin">未登录</div>
         <div v-else style="display:flex;align-items: center;">
             <div class="userPic" :style="{ 'background-image': 'url(' + userInfo.profile?.avatarUrl + ')' }">
             </div>
@@ -111,12 +112,19 @@ onMounted(() => {
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
-        </div>
+        </div> -->
 
     </header>
 </template>
 
 <style scoped>
+a{
+    color: white;
+    text-decoration: none;
+}
+a:visited{
+    color: white;
+}
 ::-webkit-input-placeholder{
     color: rgba(255,255,225,.6);
 }

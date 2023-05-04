@@ -30,6 +30,7 @@ import Login from '@/views/login/index.vue'
         <div class="footer">
             <Footer />
         </div>
+        <!-- <router-view></router-view> -->
     </div>
 </template>
 

@@ -6,7 +6,12 @@ import Recommend from '../views/recommend/index.vue'
 import SongSheet from '../views/songSheet/sheet.vue'
 import iLike from '@/views/iLike/index.vue'
 import Login from '@/views/login/index.vue'
+import Xiao from '@/views/Xiao.vue'
 const routes = [
+    // {
+    //     path: '/',
+    //     component: Xiao
+    // },
     {
         path: '/',
         name: 'find',
